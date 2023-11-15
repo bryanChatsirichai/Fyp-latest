@@ -228,7 +228,7 @@ const char preset1_4[] PROGMEM = "Back Page";
 
 const char preset2_name[] PROGMEM = "|----- Presets -----|";
 const char preset2_0[] PROGMEM = "Sine Wave Effect";
-const char preset2_1[] PROGMEM = "ZigZag Out Effect";
+const char preset2_1[] PROGMEM = "ZigZag (INCOMPLETE)";
 const char preset2_2[] PROGMEM = "Back Page";
 
 //
@@ -1247,10 +1247,10 @@ void loop() {
               moveMotor(FOCUS, focus_range, 0);
               focus_current = focus_range;
               //start pattern sequence
-              updateScreen(1000);
+              updateScreen(100);
               countdownMenu();
-              goDist(FOCUS, preset1_0, previous_pos, VIOLET, motor_time/2,false,false);
-              goDist(ZOOM, preset1_0, 0, VIOLET, motor_time/2,true,true);
+              goDist(FOCUS, preset1_0, previous_pos, VIOLET, motor_time/2,false,false,true);
+              goDist(ZOOM, preset1_0, 0, VIOLET, motor_time/2,true,true,false);
               fixed_paterns_menu1 = resetScreen(fixed_paterns_menu1);
               break;
             }
@@ -1264,10 +1264,10 @@ void loop() {
               //moving motor, haven start pattern yet so use default motor speed 
               moveMotor(FOCUS, focus_range,0);
               focus_current = focus_range;
-              updateScreen(1000);
+              updateScreen(100);
               countdownMenu();
-              goDist(FOCUS, preset1_1, 0, AZURE, ((float)3/4)*motor_time, false,false);
-              goDist(FOCUS, preset1_1, previous_pos, AZURE, ((float)1/4)*motor_time,false,true);
+              goDist(FOCUS, preset1_1, 0, AZURE, ((float)3/4)*motor_time, false,false,true);
+              goDist(FOCUS, preset1_1, previous_pos, AZURE, ((float)1/4)*motor_time,false,true,false);
               fixed_paterns_menu1 = resetScreen(fixed_paterns_menu1);
               break;
             }
@@ -1280,10 +1280,10 @@ void loop() {
               // setting lens to starting position
               printMoveSteps(-1, preset1_2, CADETBLUE, 2); // setting lens to starting position
               //asume going back part of motor time
-              updateScreen(1000);
+              updateScreen(100);
               countdownMenu();
-              goMultiDist(preset1_2, zoom_range, focus_range, VIOLET, motor_time/2, false, false);
-              goMultiDist(preset1_2, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true);
+              goMultiDist(preset1_2, zoom_range, focus_range, VIOLET, motor_time/2, false, false,true);
+              goMultiDist(preset1_2, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true,false);
               fixed_paterns_menu1 = resetScreen(fixed_paterns_menu1);
               break;
             }
@@ -1296,24 +1296,27 @@ void loop() {
                   Serial.println("Sine Wave Effect");
                   int previous_zoom = zoom_current;
                   int previous_focus = focus_current;
-                  Serial.print("zoom_current");
-                  Serial.println(zoom_current);
-                  Serial.print("zoom_current");
-                  Serial.println(zoom_current);
+                  // Serial.print("zoom_current");
+                  // Serial.println(zoom_current);
+                  // Serial.print("zoom_current");
+                  // Serial.println(zoom_current);
                   countdownMenu();
-                  goDist(ZOOM, preset2_0, zoom_range, CORAL, motor_time/4, false,false);
-                  goDist(FOCUS, preset2_0, focus_range, CORAL, motor_time/4, false,false);
-                  goDist(ZOOM, preset2_0, 0, CORAL, motor_time/4,false,false);
-                  goDist(FOCUS, preset2_0, 0, CORAL, motor_time/4,false,true);
+                                    
+                  goDist(ZOOM, preset2_0, zoom_range, CORAL, motor_time/4, false,false,true);
+                  goDist(FOCUS, preset2_0, focus_range, CORAL, motor_time/4, false,false,false);
+                  goDist(ZOOM, preset2_0, 0, CORAL, motor_time/4,false,false,false);
+                  goDist(FOCUS, preset2_0, 0, CORAL, motor_time/4,false,true,false);
                   //end of pattern
+                  
                   // return to initial position
-                  updateScreen(1000);
+                  updateScreen(100);
                   printMoveSteps(1, preset2_0, CADETBLUE, 1); 
-                  Serial.print("previous_zoom");
-                  Serial.println(previous_zoom);
-                  Serial.print("previous_focus");
-                  Serial.println(previous_focus);
+                  // Serial.print("previous_zoom");
+                  // Serial.println(previous_zoom);
+                  // Serial.print("previous_focus");
+                  // Serial.println(previous_focus);
                   moveMultiMotor(previous_zoom,previous_focus,0);
+                  updateScreen(100);
                   zoom_current = previous_zoom;
                   focus_current = previous_focus;
                   fixed_paterns_menu2 = resetScreen(fixed_paterns_menu2);
@@ -1322,7 +1325,30 @@ void loop() {
                 //Zigzagger Out Effect
                 case 1: {
                   fixed_paterns_menu2 = -1;
-                  Serial.println("Zigzagger Out Effect");
+                  // Serial.println("Zigzagger Out Effect");
+                  // int previous_pos = zoom_current;
+                  // int minus = zoom_current/4;
+                  // Serial.println("zoom current ");
+                  // Serial.println(zoom_current );
+                  // Serial.println("minus ");
+                  // Serial.println(minus );
+                  // countdownMenu();
+                  // for (int i=0; i<3; i++) {
+                  //   if(i == 0){
+                  //     goDist(ZOOM, preset2_1, zoom_current-minus, CORAL, motor_time/4, false,false,true);
+                  //   }
+                  //   else{
+                  //     goDist(ZOOM, preset2_1, zoom_current-minus, CORAL, motor_time/4, false,false,false);
+                  //   }
+                  //   goDist(ZOOM, preset2_1, zoom_current+(minus/2), CORAL,motor_time/7, false,false,false);
+                  // }
+                  // goDist(ZOOM, preset2_1, 0, CORAL,motor_time/7,false,true,false);
+                  
+                  // return to initial position
+                  // printMoveSteps(1, preset2_0, CADETBLUE, 1);  
+                  // moveMotor(ZOOM, previous_pos);
+                  // zoom_current = previous_pos;
+                  // fixed_paterns_menu2 = resetScreen(fixed_paterns_menu2);
                   break;
                 }
                 case 2: {
