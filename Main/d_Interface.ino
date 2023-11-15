@@ -55,7 +55,7 @@ int chooseDist(int type, int count, const char *const string_table[], bool goBac
   return pos_current;
 }
 
-void goDist(int type, const char title[], int pos_desired, uint16_t color, float motor_time, bool goBack, bool lastSequence) {
+void goDist(int type, const char title[], int pos_desired, uint16_t color, float motor_time, bool goBack, bool lastSequence,bool showScreen) {
   Serial.print("@goDist motor_time = ");
   Serial.println(motor_time);
   
@@ -63,9 +63,12 @@ void goDist(int type, const char title[], int pos_desired, uint16_t color, float
   pos_current = type ? zoom_current : focus_current;
   upper_limit = type ? zoom_range : focus_range;
 
-  //start sound
-  play_sound_1();
-  printMoveSteps(type, title, color, 0); 
+  if(showScreen){
+      //start sound
+      play_sound_1();
+      printMoveSteps(type, title, color, 0); 
+  }
+
 
   //move motor depending on exposure_option_set
   switch (exposure_option_set){
@@ -130,9 +133,9 @@ void goDist(int type, const char title[], int pos_desired, uint16_t color, float
   } else { // FOCUS
     focus_current = pos_desired;
   }
-  
-  if(lastSequence){
-    //end sound  
+
+  //end sound 
+  if(lastSequence){    
     play_sound_2();
     if(camera_shutter_open == 1){
         close_Shutter();
@@ -141,10 +144,11 @@ void goDist(int type, const char title[], int pos_desired, uint16_t color, float
     updateScreen(100);
   }
 
-  // returns to original spot
-  //go back acceleration and speed could be faster
+  // returns to original spot, go back acceleration and speed could be faster
   if (goBack) {
-    printMoveSteps(type, title, color, 1);
+    if(showScreen){
+      printMoveSteps(type, title, color,1);
+    }
     moveMotor(type, pos_current, 0);
     //zoom / focus current postion after moving to desired position
     if (type) { // ZOOM
@@ -152,11 +156,11 @@ void goDist(int type, const char title[], int pos_desired, uint16_t color, float
     } else { // FOCUS
       focus_current = pos_current;
     }
+   updateScreen(100);
   }
-  updateScreen(100);
 }
 
-void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16_t color, float motor_time, bool goBack,bool lastSequence) {
+void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16_t color, float motor_time, bool goBack,bool lastSequence,bool showScreen) {
   Serial.print("@goMultiDist motor_time = ");
   Serial.println(motor_time);
 
@@ -164,13 +168,11 @@ void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16
   prev_zoom = zoom_current;
   prev_focus = focus_current;
 
-  //start sound
-  //buzz();
-  //play_start_sound();
-  //play_notification_sound_v2();
-  //delay(5000);
-  play_sound_1();
-  printMoveSteps(3, title, color, 0);
+  if(showScreen){
+      //start sound
+      play_sound_1();
+      printMoveSteps(3, title, color, 0);
+  }
   //Serial.println("Both moving to position");
 
   //move motor depending on exposure_option_set
@@ -227,10 +229,6 @@ void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16
   focus_current = focus_desired;
 
   if(lastSequence){
-    //nikonTime(1000);
-    //end sound  
-    //buzz();
-    //play_stop_sound();
     play_sound_2();
     if(camera_shutter_open == 1){
         close_Shutter();
@@ -244,13 +242,16 @@ void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16
 
   // returns to original spot
   if (goBack) {
-    Serial.println("Both going back to position");
-    printMoveSteps(3, title, color, 1);
-    moveMultiMotor(prev_zoom, prev_focus,0);
 
+    if(showScreen){
+      Serial.println("Both going back to position");
+      printMoveSteps(3, title, color, 1);
+    }
+    moveMultiMotor(prev_zoom, prev_focus,0);
     //see this got any differentce .....
     zoom_current = prev_zoom;
-    focus_current = prev_focus;
+    focus_current = prev_focus;  
+    updateScreen();
   }
-  updateScreen();
+
 }

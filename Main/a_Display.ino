@@ -460,27 +460,23 @@ void printMoveSteps(int type, const char title[], uint16_t color, int goBack) {
     tft.println(type ? zoom_range : focus_range);
   }
   tft.println();
-
-
-
-  //char myChar;
-  // tft.setTextColor(color);
-  // for (byte k=0; k<strlen_P(title); k++) {
-  //   //myChar = pgm_read_byte_near(title+k);
-  //   tft.print(myChar);
-  // }
-
   tft.print(title);
   tft.drawLine(0, 75, tft.width(), 75,WHITE);
   tft.setCursor(0, 85);
   tft.setTextColor(WHITE);
+
   switch(goBack) {
     case 0: {
-      tft.println(F("Moving to "));
+      // tft.println(F("Moving to "));
+      // tft.setTextColor(LIGHTSKYBLUE, BLACK);
+      // tft.print(F("DESIRED "));
+      // tft.setTextColor(WHITE, BLACK);
+      // tft.println(F("location"));
+      tft.println(F("EXECUTING "));
       tft.setTextColor(LIGHTSKYBLUE, BLACK);
       tft.print(F("DESIRED "));
       tft.setTextColor(WHITE, BLACK);
-      tft.println(F("location"));
+      tft.println(F("PATTERN"));
       break;
     }
     case 1: {

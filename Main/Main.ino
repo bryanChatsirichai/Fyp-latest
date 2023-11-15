@@ -362,11 +362,12 @@ void printMoveSteps(int type, const char title[], uint16_t color, int goBack);
 void setAccel(int type, float accel);
 void setCurrentPos(int type, float value);
 
-void goDist(int type, const char title[], int pos_desired, uint16_t color=WHITE, float motor_time = motor_time, bool goBack=true,bool lastSequence=true);
+void goDist(int type, const char title[], int pos_desired, uint16_t color=WHITE, float motor_time = motor_time, bool goBack=true,bool lastSequence=true,bool showScreen=true);
 void moveMotor(int type, int pos_desired, float motor_time = motor_time);
 
 void moveMultiMotor(int zoom_value, int focus_value, float motor_time = motor_time);
-void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16_t color=WHITE, float motor_time = motor_time, bool goBack=true,bool lastSequence=true);
+void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16_t color=WHITE, float motor_time = motor_time, bool goBack=true,bool lastSequence=true,bool showScreen=true);
+
 void goToHomeMenu();
 void buzz(int delay_ms=500, int freq=1000);
 void nikonTime(int exposure_time);
@@ -411,6 +412,7 @@ void open_Shutter() { // Controls the shutter of a Nikon camera
   delay(150);
   digitalWrite(FOCUS_CAMERA, HIGH);  
   digitalWrite(SHUTTER_CAMERA, HIGH);
+  delay(500);
 }
 void close_Shutter() { // Controls the shutter of a Nikon camera
   Serial.println("Close");
@@ -422,6 +424,7 @@ void close_Shutter() { // Controls the shutter of a Nikon camera
   delay(150);
   digitalWrite(FOCUS_CAMERA, HIGH);  
   digitalWrite(SHUTTER_CAMERA, HIGH);
+  delay(500);
 }
 
 
@@ -793,7 +796,7 @@ void loop() {
                 countdownMenu();
                 //global motor time pass in by default
                 //return to starting position by default
-                goDist(ZOOM, zm1_0, zoom_range, SNOW);
+                goDist(ZOOM, zm1_0, zoom_range, SNOW, motor_time,true,true,true);
                 zoom_movements_menu1 = resetScreen(zoom_movements_menu1);
                 break;
               }
@@ -803,7 +806,7 @@ void loop() {
                 countdownMenu();
                 //global motor time pass in by default
                 //return to starting position by default
-                goDist(ZOOM, zm1_1, 0, SNOW);
+                goDist(ZOOM, zm1_1, 0, SNOW, motor_time,true,true,true);
                 zoom_movements_menu1 = resetScreen(zoom_movements_menu1);
                 break;
               }
@@ -816,7 +819,7 @@ void loop() {
                 updateScreen(100);
                 countdownMenu();
                 //return to starting position by default
-                goDist(ZOOM, zm1_2, pos_desired, YELLOWGREEN);
+                goDist(ZOOM, zm1_2, pos_desired, YELLOWGREEN, motor_time,true,true,true);
                 zoom_movements_menu1 = resetScreen(zoom_movements_menu1);
                 break;
               }
@@ -831,8 +834,8 @@ void loop() {
                     int previous_pos = zoom_current;
                     countdownMenu();
                     //going back is now part of motor_time
-                    goDist(ZOOM, zm2_0, zoom_range, SNOW, motor_time/2,false,false);
-                    goDist(ZOOM, zm2_0, previous_pos, SNOW, motor_time/2,false,true);
+                    goDist(ZOOM, zm2_0, zoom_range, SNOW, motor_time/2,false,false,true);
+                    goDist(ZOOM, zm2_0, previous_pos, SNOW, motor_time/2,false,true,false);
                     zoom_movements_menu2 = resetScreen(zoom_movements_menu2);
                     break;
                   }
@@ -844,8 +847,8 @@ void loop() {
                     int previous_pos = zoom_current;
                     countdownMenu();
                     //going back is now part of motor_time
-                    goDist(ZOOM, zm2_1, 0, SNOW, motor_time/2,false,false);
-                    goDist(ZOOM, zm2_1, previous_pos, SNOW, motor_time/2,false,true);
+                    goDist(ZOOM, zm2_1, 0, SNOW, motor_time/2,false,false,true);
+                    goDist(ZOOM, zm2_1, previous_pos, SNOW, motor_time/2,false,true,false);
                     zoom_movements_menu2 = resetScreen(zoom_movements_menu2);
                     break;
                   }              
@@ -863,8 +866,8 @@ void loop() {
                     countdownMenu();
 
                     //going back is now part of motor_time
-                    goDist(ZOOM, zm2_2, pos_desired, SNOW, motor_time/2,false,false);
-                    goDist(ZOOM, zm2_2, previous_pos, SNOW, motor_time/2,false,true);
+                    goDist(ZOOM, zm2_2, pos_desired, SNOW, motor_time/2,false,false,true);
+                    goDist(ZOOM, zm2_2, previous_pos, SNOW, motor_time/2,false,true,false);
                     zoom_movements_menu2 = resetScreen(zoom_movements_menu2);
                     break;
                   } 
@@ -905,7 +908,7 @@ void loop() {
               case 0: {
                 Serial.println("Focus to max");
                 countdownMenu();
-                goDist(FOCUS, fm1_0, focus_range, SNOW);
+                goDist(FOCUS, fm1_0, focus_range, SNOW,motor_time,true,true,true);
                 focus_movements_menu1 = resetScreen(focus_movements_menu1);
                 break;
               }
@@ -913,7 +916,7 @@ void loop() {
               case 1: {
                 Serial.println("Focus to min");
                 countdownMenu();
-                goDist(FOCUS, fm1_1, 0, SNOW);
+                goDist(FOCUS, fm1_1, 0, SNOW,motor_time,true,true,true);
                 focus_movements_menu1 = resetScreen(focus_movements_menu1);
                 break;
               }
@@ -924,7 +927,7 @@ void loop() {
                 pos_desired = chooseDist(FOCUS, 3, focus_dist, true, YELLOWGREEN);
                 updateScreen();
                 countdownMenu();
-                goDist(FOCUS, fm1_2, pos_desired, YELLOWGREEN);
+                goDist(FOCUS, fm1_2, pos_desired, YELLOWGREEN,motor_time,true,true,true);
                 focus_movements_menu1 = resetScreen(focus_movements_menu1);
                 break;
               }
@@ -939,8 +942,8 @@ void loop() {
                     int previous_pos = focus_current;
                     countdownMenu();
                     //going back is now part of motor_time
-                    goDist(FOCUS, fm2_0, focus_range, SNOW, motor_time/2,false,false);
-                    goDist(FOCUS, fm2_0, previous_pos, SNOW, motor_time/2,false,true);
+                    goDist(FOCUS, fm2_0, focus_range, SNOW, motor_time/2,false,false,true);
+                    goDist(FOCUS, fm2_0, previous_pos, SNOW, motor_time/2,false,true,false);
                     focus_movements_menu2 = resetScreen(focus_movements_menu2);
                     break;
                   }
@@ -953,8 +956,8 @@ void loop() {
                     int previous_pos = focus_current;
                     countdownMenu();
                     //going back is now part of motor_time
-                    goDist(FOCUS, fm2_1, 0, SNOW, motor_time/2,false,false);
-                    goDist(FOCUS, fm2_1, previous_pos, SNOW, motor_time/2,false,true);
+                    goDist(FOCUS, fm2_1, 0, SNOW, motor_time/2,false,false,true);
+                    goDist(FOCUS, fm2_1, previous_pos, SNOW, motor_time/2,false,true,false);
                     focus_movements_menu2 = resetScreen(focus_movements_menu2);
                     break;
                   }
@@ -968,8 +971,8 @@ void loop() {
                     updateScreen();
                     countdownMenu();
                     //going back is now part of motor_time
-                    goDist(FOCUS, fm2_1, pos_desired, SNOW, motor_time/2,false,false);
-                    goDist(FOCUS, fm2_1, previous_pos, SNOW, motor_time/2,false,true);
+                    goDist(FOCUS, fm2_1, pos_desired, SNOW, motor_time/2,false,false,true);
+                    goDist(FOCUS, fm2_1, previous_pos, SNOW, motor_time/2,false,true,false);
                     focus_movements_menu2 = resetScreen(focus_movements_menu2);
                     break;
                   } 
@@ -1008,7 +1011,7 @@ void loop() {
               case 0: {
                 Serial.println("ZF both to max");
                 countdownMenu();
-                goMultiDist(zf1_0, zoom_range, focus_range, VIOLET);
+                goMultiDist(zf1_0, zoom_range, focus_range, VIOLET,motor_time,true,true,true);
                 zoom_focus_movements_menu1 = resetScreen(zoom_focus_movements_menu1);
                 break;
               }
@@ -1016,7 +1019,7 @@ void loop() {
               case 1: {
                 Serial.println("ZF both to min");
                 countdownMenu();
-                goMultiDist(zf1_1, 0, 0, AZURE);
+                goMultiDist(zf1_1, 0, 0, AZURE,motor_time,true,true,true);
                 zoom_focus_movements_menu1 = resetScreen(zoom_focus_movements_menu1);
                 break;
               } 
@@ -1035,7 +1038,7 @@ void loop() {
                 }
                 updateScreen(100);
                 countdownMenu();
-                goMultiDist(zf1_2, zoom_desired, focus_desired, LIME);
+                goMultiDist(zf1_2, zoom_desired, focus_desired, LIME,motor_time,true,true,true);
                 zoom_focus_movements_menu1 = resetScreen(zoom_focus_movements_menu1);
                 break;          
               }
@@ -1046,7 +1049,7 @@ void loop() {
                   case 0: {
                     Serial.println("zoom to max, focus to min");
                     countdownMenu();
-                    goMultiDist(zf2_0, zoom_range, 0, CORAL);
+                    goMultiDist(zf2_0, zoom_range, 0, CORAL,motor_time,true,true,true);
                     zoom_focus_movements_menu2 = resetScreen(zoom_focus_movements_menu2);
                     break;
                   } 
@@ -1054,7 +1057,7 @@ void loop() {
                   case 1: {
                     Serial.println("zoom to min, focus to max");
                     countdownMenu();
-                    goMultiDist(zf2_1, 0, focus_range, CORAL);
+                    goMultiDist(zf2_1, 0, focus_range, CORAL,motor_time,true,true,true);
                     zoom_focus_movements_menu2 = resetScreen(zoom_focus_movements_menu2);
                     break;
                   }
@@ -1074,8 +1077,8 @@ void loop() {
                         // Serial.println(previous_focus_pos);
                         countdownMenu();
                         //going back is now part of motor_time
-                        goMultiDist(zf3_0, zoom_range, focus_range, VIOLET, motor_time/2, false, false);
-                        goMultiDist(zf3_0, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true);
+                        goMultiDist(zf3_0, zoom_range, focus_range, VIOLET, motor_time/2, false, false,true);
+                        goMultiDist(zf3_0, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true,false);
                         zoom_focus_movements_menu3 = resetScreen(zoom_focus_movements_menu3);
                         break;
                       }
@@ -1090,8 +1093,8 @@ void loop() {
                         // Serial.println(previous_focus_pos);
                         countdownMenu();
                         //going back is now part of motor_time
-                        goMultiDist(zf3_1, 0, 0, VIOLET, motor_time/2, false, false);
-                        goMultiDist(zf3_1, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true);
+                        goMultiDist(zf3_1, 0, 0, VIOLET, motor_time/2, false, false,true);
+                        goMultiDist(zf3_1, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true,false);
                         zoom_focus_movements_menu3 = resetScreen(zoom_focus_movements_menu3);
                         break;
                       }
@@ -1117,8 +1120,8 @@ void loop() {
                         updateScreen(100);
                         countdownMenu();
                         //going back is now part of motor_time
-                        goMultiDist(zf3_2, zoom_desired, focus_desired, VIOLET, motor_time/2, false, false);
-                        goMultiDist(zf3_2, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true);
+                        goMultiDist(zf3_2, zoom_desired, focus_desired, VIOLET, motor_time/2, false, false,true);
+                        goMultiDist(zf3_2, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true,false);
                         zoom_focus_movements_menu3 = resetScreen(zoom_focus_movements_menu3);
                         break;
                       }
@@ -1136,8 +1139,8 @@ void loop() {
                             // Serial.println(previous_focus_pos);
                             countdownMenu();
                             //going back is now part of motor_time
-                            goMultiDist(zf4_0, zoom_range, 0, VIOLET, motor_time/2, false, false);
-                            goMultiDist(zf4_0, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true);
+                            goMultiDist(zf4_0, zoom_range, 0, VIOLET, motor_time/2, false, false,true);
+                            goMultiDist(zf4_0, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true,false);
                             zoom_focus_movements_menu4 = resetScreen(zoom_focus_movements_menu4);
                             break;
                           }                  
@@ -1152,8 +1155,8 @@ void loop() {
                             // Serial.println(previous_focus_pos);
                             countdownMenu();
                             //going back is now part of motor_time
-                            goMultiDist(zf4_1, 0, focus_range, VIOLET, motor_time/2, false, false);
-                            goMultiDist(zf4_1, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true);
+                            goMultiDist(zf4_1, 0, focus_range, VIOLET, motor_time/2, false, false,true);
+                            goMultiDist(zf4_1, previous_zoom_pos, previous_focus_pos, VIOLET, motor_time/2, false, true,false);
                             zoom_focus_movements_menu4 = resetScreen(zoom_focus_movements_menu4);
                             break;
                           }
