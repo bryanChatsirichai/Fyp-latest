@@ -136,9 +136,9 @@ void goDist(int type, const char title[], int pos_desired, uint16_t color, float
 
   //end sound 
   if(lastSequence){    
-    play_sound_2();
+    close_Shutter();
     if(camera_shutter_open == 1){
-        close_Shutter();
+        play_sound_2();
         camera_shutter_open = 0;
       }
     updateScreen(100);
@@ -229,9 +229,9 @@ void goMultiDist(const char title[], int zoom_desired, int focus_desired, uint16
   focus_current = focus_desired;
 
   if(lastSequence){
-    play_sound_2();
+    close_Shutter();
     if(camera_shutter_open == 1){
-        close_Shutter();
+        play_sound_2();
         camera_shutter_open = 0;
       }
     //close shutter(); //nikonTime(1000);
